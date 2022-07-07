@@ -1,14 +1,100 @@
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
 namespace SpeedTester
 {
     public partial class FormSpeedTester : Form
     {
-        private readonly HostSearcher _hostSearcher;
+        private const double MessureSeconds = 5;
+        private const int PORT = 43210;
+        private readonly CancellationTokenSource _tcs = new();
+        private readonly Dictionary<IPEndPoint, ClientData> _clients = new();
 
         public FormSpeedTester()
         {
             InitializeComponent();
 
-            _hostSearcher = new();
+            StartReceiver();
+        }
+
+    
+
+        public class ClientData
+        {
+            public long SequenceCounter { get; set; }
+            public long MissedPackages { get; set; }
+
+            public double BlocksPerSecond { get; set; }
+            public List<DateTime> ReceivedTimeStamps { get; } = new();
+        }
+
+
+        private void StartReceiver()
+        {
+            Task.Run(() =>
+            {
+                using (UdpClient udpClient = new UdpClient())
+                {
+                    udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
+
+                    var from = new IPEndPoint(0, 0);
+
+                    while (!_tcs.IsCancellationRequested)
+                    {
+                        var recvBuffer = udpClient.Receive(ref from);
+                        if (recvBuffer == null)
+                            break;
+
+                        if (recvBuffer.Length < 4)
+                            continue;
+
+                        var now = DateTime.UtcNow;
+
+                        var sequence = BitConverter.ToInt32(recvBuffer);
+
+                        lock (_clients)
+                        {
+                            if (!_clients.TryGetValue(from, out var clientData))
+                                _clients.Add(from, clientData = new());
+
+                            var delta = sequence - (clientData.SequenceCounter + 1);
+
+                            clientData.SequenceCounter += delta;
+
+                            clientData.ReceivedTimeStamps.Add(now);
+
+                            while (true)
+                            {
+                                var first = clientData.ReceivedTimeStamps.FirstOrDefault();
+                                if (first == default)
+                                    break;
+
+                                if (first.AddSeconds(MessureSeconds) >= now)
+                                    break;
+
+                                clientData.ReceivedTimeStamps.RemoveAt(0);
+                            }
+
+                            clientData.BlocksPerSecond = clientData.ReceivedTimeStamps.Count / MessureSeconds;
+                        }
+                    }
+                }
+            });
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            var text = new StringBuilder();
+            lock(_clients)
+            {
+                foreach(var item in _clients)
+                {
+                    text.AppendLine(item.Value.BlocksPerSecond.ToString());
+                    text.AppendLine(item.Value.MissedPackages.ToString());
+                }
+            }
+            label1.Text = text.ToString();
         }
     }
 }
