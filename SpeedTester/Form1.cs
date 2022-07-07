@@ -8,6 +8,7 @@ namespace SpeedTester
     {
         private const double MessureSeconds = 5;
         private const int PORT = 43210;
+        private const int BlockSize = 1024*4;
         private readonly CancellationTokenSource _tcs = new();
         private readonly Dictionary<IPEndPoint, ClientData> _clients = new();
 
@@ -18,7 +19,7 @@ namespace SpeedTester
             StartReceiver();
         }
 
-    
+
 
         public class ClientData
         {
@@ -36,6 +37,7 @@ namespace SpeedTester
             {
                 using (UdpClient udpClient = new UdpClient())
                 {
+                    udpClient.Client.EnableBroadcast = true;
                     udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
 
                     var from = new IPEndPoint(0, 0);
@@ -62,8 +64,6 @@ namespace SpeedTester
 
                             clientData.SequenceCounter += delta;
 
-                            clientData.ReceivedTimeStamps.Add(now);
-
                             while (true)
                             {
                                 var first = clientData.ReceivedTimeStamps.FirstOrDefault();
@@ -75,6 +75,7 @@ namespace SpeedTester
 
                                 clientData.ReceivedTimeStamps.RemoveAt(0);
                             }
+                            clientData.ReceivedTimeStamps.Add(now);
 
                             clientData.BlocksPerSecond = clientData.ReceivedTimeStamps.Count / MessureSeconds;
                         }
@@ -86,15 +87,24 @@ namespace SpeedTester
         private void timer1_Tick(object sender, EventArgs e)
         {
             var text = new StringBuilder();
-            lock(_clients)
+            lock (_clients)
             {
-                foreach(var item in _clients)
+                foreach (var item in _clients)
                 {
-                    text.AppendLine(item.Value.BlocksPerSecond.ToString());
-                    text.AppendLine(item.Value.MissedPackages.ToString());
+                    text.AppendLine(FormatNumber((long)item.Value.BlocksPerSecond * BlockSize * 8));
+                    text.AppendLine(item.Value.MissedPackages.ToString() + " packages missed");
                 }
             }
             label1.Text = text.ToString();
+        }
+
+        private string FormatNumber(long v)
+        {
+            if (v > 1024 * 1024 * 10)
+                return (v / (1024 * 1024)).ToString("0.0") + " Mbit/s";
+            else if (v > 1024 * 10)
+                return (v / 1024).ToString("0.0") + " kbit/s";
+            else return v.ToString("0") + " bit/s";
         }
     }
 }

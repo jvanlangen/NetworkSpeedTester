@@ -36,12 +36,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 64F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(155, 41);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 32F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(316, 114);
+            this.label1.Size = new System.Drawing.Size(52, 59);
             this.label1.TabIndex = 0;
-            this.label1.Text = "3 Mb/s";
+            this.label1.Text = "...";
             // 
             // timer1
             // 
