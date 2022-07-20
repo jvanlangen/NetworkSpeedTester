@@ -7,8 +7,8 @@ namespace SpeedTester
     public partial class FormSpeedTester : Form
     {
         private const double MessureSeconds = 5;
-        private const int PORT = 43210;
-        private const int BlockSize = 1024*4;
+        private const int PORT = 43211;
+        private int _blockSize = 0;
         private readonly CancellationTokenSource _tcs = new();
         private readonly Dictionary<IPEndPoint, ClientData> _clients = new();
 
@@ -51,6 +51,8 @@ namespace SpeedTester
                         if (recvBuffer.Length < 4)
                             continue;
 
+                        _blockSize = recvBuffer.Length;
+
                         var now = DateTime.UtcNow;
 
                         var sequence = BitConverter.ToInt32(recvBuffer);
@@ -91,7 +93,7 @@ namespace SpeedTester
             {
                 foreach (var item in _clients)
                 {
-                    text.AppendLine(FormatNumber((long)item.Value.BlocksPerSecond * BlockSize * 8));
+                    text.AppendLine(FormatNumber((long)item.Value.BlocksPerSecond * _blockSize * 8));
                     text.AppendLine(item.Value.MissedPackages.ToString() + " packages missed");
                 }
             }
