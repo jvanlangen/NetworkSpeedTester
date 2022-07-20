@@ -48,7 +48,7 @@ namespace SpeedTester
                         if (recvBuffer == null)
                             break;
 
-                        if (recvBuffer.Length < 4)
+                        if (recvBuffer.Length < 8)
                             continue;
 
                         _blockSize = recvBuffer.Length;

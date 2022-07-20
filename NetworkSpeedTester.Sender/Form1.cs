@@ -21,7 +21,7 @@ namespace NetworkSpeedTester.Sender
                 {
                     udpClient.Client.EnableBroadcast = true;
                     long counter = 0;
-                    var data = new byte[1024*1];
+                    var data = new byte[1024*16];
                     var rnd = new Random();
 
                     for (int i = 0; i < data.Length; i++)
@@ -29,7 +29,7 @@ namespace NetworkSpeedTester.Sender
 
                     while (!_tcs.IsCancellationRequested)
                     {
-                        var bytes = BitConverter.GetBytes(counter);
+                        var bytes = BitConverter.GetBytes(counter++);
                         Array.Copy(bytes, data, bytes.Length);
                         udpClient.Send(data, data.Length, "192.168.8.255", PORT);
                     }
