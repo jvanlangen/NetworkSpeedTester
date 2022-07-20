@@ -66,6 +66,8 @@ namespace SpeedTester
 
                             clientData.SequenceCounter += delta;
 
+                            clientData.MissedPackages += delta - 1;
+
                             while (true)
                             {
                                 var first = clientData.ReceivedTimeStamps.FirstOrDefault();

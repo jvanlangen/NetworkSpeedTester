@@ -21,7 +21,12 @@ namespace NetworkSpeedTester.Sender
                 {
                     udpClient.Client.EnableBroadcast = true;
                     long counter = 0;
-                    var data = new byte[1024*32];
+                    var data = new byte[1024*1];
+                    var rnd = new Random();
+
+                    for (int i = 0; i < data.Length; i++)
+                        data[i] = (byte)rnd.Next();
+
                     while (!_tcs.IsCancellationRequested)
                     {
                         var bytes = BitConverter.GetBytes(counter);
