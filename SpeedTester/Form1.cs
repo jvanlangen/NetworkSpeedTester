@@ -66,7 +66,7 @@ namespace SpeedTester
 
                             clientData.SequenceCounter += delta;
 
-                            clientData.MissedPackages += delta - 1;
+                            clientData.MissedPackages += delta;
 
                             while (true)
                             {
