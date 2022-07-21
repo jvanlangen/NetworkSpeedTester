@@ -5,7 +5,11 @@ VisualStudioVersion = 17.3.32611.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetworkSpeedTester.Receiver", "SpeedTester\NetworkSpeedTester.Receiver.csproj", "{167283CE-1C00-4449-990E-138E8B1ACC1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkSpeedTester.Sender", "NetworkSpeedTester.Sender\NetworkSpeedTester.Sender.csproj", "{E547D0B8-491B-44CC-9129-26A606DED4C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetworkSpeedTester.Sender", "NetworkSpeedTester.Sender\NetworkSpeedTester.Sender.csproj", "{E547D0B8-491B-44CC-9129-26A606DED4C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPStreamerServer", "TCPStreamerServer\TCPStreamerServer.csproj", "{A2BFD27A-6398-4286-94CC-8DB3268B411C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPStreamerClient", "TCPStreamClient\TCPStreamerClient.csproj", "{E4E3043B-CE93-4905-8BC7-F7081A677905}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{E547D0B8-491B-44CC-9129-26A606DED4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E547D0B8-491B-44CC-9129-26A606DED4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E547D0B8-491B-44CC-9129-26A606DED4C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2BFD27A-6398-4286-94CC-8DB3268B411C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2BFD27A-6398-4286-94CC-8DB3268B411C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2BFD27A-6398-4286-94CC-8DB3268B411C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2BFD27A-6398-4286-94CC-8DB3268B411C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E3043B-CE93-4905-8BC7-F7081A677905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E3043B-CE93-4905-8BC7-F7081A677905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E3043B-CE93-4905-8BC7-F7081A677905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E3043B-CE93-4905-8BC7-F7081A677905}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
